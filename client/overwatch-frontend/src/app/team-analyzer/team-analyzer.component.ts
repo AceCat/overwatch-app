@@ -16,6 +16,11 @@ export class TeamAnalyzerComponent implements OnInit {
 	characterCounter = 0;
 	selectedCharacter = "";
 
+
+	colors = [
+	"rgba(249,158,26, .5)", "rgba(33,143,254, .5)"
+	]
+
 	characters = [
 	{
 		name: 'Soldier 76',
@@ -47,12 +52,24 @@ export class TeamAnalyzerComponent implements OnInit {
 		var newChart = new Chart(teamRadarChart, {
 		type: 'radar',
 		data: this.radarData,
+
+
 		options: {
+			scale: {
+				ticks: {
+					min: -5
+				}
+		},
         	legend: {
-        		position: 'top'
+        		position: 'top',
           } 
 		}
   	  })
+	}
+
+	removeRadarChart(){
+		$('#teamStats').empty();
+		console.log('radar chart removed')
 	}
 
 
@@ -71,13 +88,14 @@ export class TeamAnalyzerComponent implements OnInit {
 
 			var newCharacter = {
 				label: processedResponse.name,
-				backgroundColor: "rgba(249,158,26, .5)",
+				backgroundColor: this.colors[this.characterCounter],
 				data: newCharacterStats
 			}
 
 			this.characterCounter++
 			this.createCharacterDiv()
 			this.radarData.datasets.push(newCharacter)
+			this.removeRadarChart();
 			this.renderRadarChart()
 			this.setCharacterImage(newCharacterImage)
 			this.selectedCharacter = "";
@@ -93,6 +111,7 @@ export class TeamAnalyzerComponent implements OnInit {
 		removeCharacterButton.on('click', function(){
 			this.remove()
 			self.radarData.datasets.splice(currentCount - 1, 1);
+			self.characterCounter--;
 			self.renderRadarChart();
 		})
 	}
