@@ -40,7 +40,6 @@ export class TeamAnalyzerComponent implements OnInit {
 
   ngOnInit() {
   	this.renderRadarChart();
-  	this.createCharacterDiv();
   }
 
 	renderRadarChart(){
@@ -77,6 +76,7 @@ export class TeamAnalyzerComponent implements OnInit {
 			}
 
 			this.characterCounter++
+			this.createCharacterDiv()
 			this.radarData.datasets.push(newCharacter)
 			this.renderRadarChart()
 			this.setCharacterImage(newCharacterImage)
@@ -85,14 +85,24 @@ export class TeamAnalyzerComponent implements OnInit {
 	}
 
 	createCharacterDiv(){
-		var newCharacterDiv = $("<div class='col-md-4'><div><img id=characterImage" + this.characterCounter + "/></div></div>")
-		$('body').append(newCharacterDiv);
+		var self = this;
+		var currentCount = this.characterCounter
+		var newCharacterDiv = $("<div class='col-md-4' id=characterDiv" + this.characterCounter + "><div><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "></div></div>")
+		$('.row').append(newCharacterDiv);
+		var removeCharacterButton = $('#characterDiv' + this.characterCounter).append($('<button>Remove</button>'))
+		removeCharacterButton.on('click', function(){
+			this.remove()
+			self.radarData.datasets.splice(currentCount - 1, 1);
+			self.renderRadarChart();
+		})
 	}
 
 	setCharacterImage(imageFile){
 		var portraitSpace = $('#characterImage' + this.characterCounter);
 		portraitSpace.attr('src', '../../assets/Overwatch_Images/' + imageFile)
 	}
+
+
 	// loadCharacter(){
 	// 	this.http.get()
 	// }
