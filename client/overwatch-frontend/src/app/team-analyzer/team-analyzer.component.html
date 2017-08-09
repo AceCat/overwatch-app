@@ -1,0 +1,77 @@
+
+<div class='container'>
+	<div class='chartContainer'>
+		<canvas id="teamStats"></canvas>
+	</div>
+
+	<datalist id='characterList'>
+		<option *ngFor='let character of characters' value={{character.name}} ngDefaultControl></option>
+	</datalist>
+	<input list='characterList' [(ngModel)]="selectedCharacter">
+	<button id='addCharacter' (click)='findCharacter()'>Add Character</button>
+
+	<br />
+
+	<div class='row'>
+
+		<div class='col-md-4'>
+			<div>
+				<img id=characterImage1/>
+			</div>
+			<input>
+			<button>Submit</button>
+		</div>
+
+
+			<div class='col-md-4'>
+			<div>
+				<img id='characterImage2'/>
+			</div>
+			<h3></h3>
+			<button>Submit</button>
+		</div>
+
+
+		<div class='col-md-4'>
+			<div>
+				<img id='characterImage3'/>
+			</div>
+			<input>
+			<button>Submit</button>
+		</div>
+	</div>
+
+	<div class='row'>
+
+		<div class='col-md-4'>
+			<div>
+				<img id='characterImage4'/>
+			</div>
+			<input>
+			<button>Submit</button>
+		</div>
+
+
+			<div class='col-md-4'>
+			<div>
+				<img id='characterImage5'/>
+			</div>
+			<input>
+			<button>Submit</button>
+		</div>
+
+
+		<div class='col-md-4'>
+			<div>
+				<img id='characterImage6'/>
+			</div>
+			<input>
+			<button>Submit</button>
+		</div>
+
+	</div>
+
+</div>
+
+
+
