@@ -47,7 +47,8 @@ router.post('/', function (request, response) {
 		role: request.body.role,
 		health: request.body.health,
 		stats: request.body.stats, 
-		description: request.body.description
+		description: request.body.description,
+		image: request.body.image
 	})
 	console.log(request)
 	character.save();

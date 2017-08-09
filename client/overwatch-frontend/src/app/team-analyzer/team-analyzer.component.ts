@@ -15,6 +15,7 @@ import Chart from 'chart.js';
 export class TeamAnalyzerComponent implements OnInit {
 	characterCounter = 0;
 	selectedCharacter = "";
+	newChart;
 
 
 	colors = [
@@ -30,6 +31,9 @@ export class TeamAnalyzerComponent implements OnInit {
 	},
 	{
 		name: 'Sombra',
+	},
+	{
+		name: 'Reinhardt'
 	}
 	];
 
@@ -49,7 +53,7 @@ export class TeamAnalyzerComponent implements OnInit {
 
 	renderRadarChart(){
 		var teamRadarChart = $('#teamStats')[0].getContext('2d');
-		var newChart = new Chart(teamRadarChart, {
+		this.newChart = new Chart(teamRadarChart, {
 		type: 'radar',
 		data: this.radarData,
 
@@ -68,7 +72,7 @@ export class TeamAnalyzerComponent implements OnInit {
 	}
 
 	removeRadarChart(){
-		$('#teamStats').empty();
+		$('#teamStats').remove();
 		console.log('radar chart removed')
 	}
 
@@ -95,8 +99,9 @@ export class TeamAnalyzerComponent implements OnInit {
 			this.characterCounter++
 			this.createCharacterDiv()
 			this.radarData.datasets.push(newCharacter)
-			this.removeRadarChart();
-			this.renderRadarChart()
+			// this.removeRadarChart();
+			// this.renderRadarChart()
+			this.newChart.update();
 			this.setCharacterImage(newCharacterImage)
 			this.selectedCharacter = "";
 		})
