@@ -172,6 +172,7 @@ export class TeamAnalyzerComponent implements OnInit {
 			this.remove()
 			self.characterCounter--
 			self.teamChart.update();
+			self.individualChart.update();
 		})
 
 		function removeCharacterData(){
@@ -185,6 +186,7 @@ export class TeamAnalyzerComponent implements OnInit {
 			})
 		}
 			self.radarDataAdditive.datasets.splice(indexToRemove, 1);
+			self.radarData.datasets.splice(indexToRemove, 1);
 
 	}
 
