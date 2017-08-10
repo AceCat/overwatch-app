@@ -79,7 +79,7 @@ export class TeamAnalyzerComponent implements OnInit {
 
 
 	
-	findCharacter(){
+	addCharacter(){
 		this.http.get('http://localhost:3000/characters/' + this.selectedCharacter).subscribe(response => {
 			var self = this
 			var processedResponse = response.json()
@@ -130,34 +130,44 @@ export class TeamAnalyzerComponent implements OnInit {
 		})
 	}
 
+
 	createCharacterDiv(){
 		var self = this;
+		var characterName = this.selectedCharacter;
 		var currentCount = this.characterCounter
 		console.log("character counter = " + currentCount)
 		var newCharacterDiv = $("<div class='col-md-4' id=characterDiv" + this.characterCounter + "><div><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "></div></div>")
 		$('.row').append(newCharacterDiv);
 		var removeCharacterButton = $('#characterDiv' + this.characterCounter).append($('<button>Remove</button>'))
 		
+		function findCharacter(array, attr, value) {
+    		for(var i = 0; i < array.length; i += 1) {
+        		if(array[i][attr] === value) {
+            		return i;
+       				}
+    			}
+    			return -1;
+			}
+
 		removeCharacterButton.on('click', function(){
 			removeCharacterData()
 			this.remove()
-			self.radarDataAdditive.datasets.splice(currentCount, 1);
-			self.characterCounter = self.characterCounter - currentCount;
+			self.characterCounter--
 			self.teamChart.update();
 		})
 
 		function removeCharacterData(){
-			var indexToRemove = currentCount;
-			console.log(indexToRemove)
-			console.log(self.radarDataAdditive.datasets)
+			var indexToRemove = self.radarDataAdditive.datasets.findIndex(character => character.label === characterName)
+
 			var removedCharacter = self.radarDataAdditive.datasets[indexToRemove].data
 			var valuesToSubtract = self.radarDataAdditive.datasets
 			for (var i = currentCount + 1; i < valuesToSubtract.length; i++){
 				valuesToSubtract[i].data.forEach(function(item, index, arr){
 					arr[index] = item - removedCharacter[index]
 			})
-
 		}
+			self.radarDataAdditive.datasets.splice(indexToRemove, 1);
+
 	}
 
 }

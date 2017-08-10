@@ -8,10 +8,11 @@
 		<option *ngFor='let character of characters' value={{character.name}} ngDefaultControl></option>
 	</datalist>
 	<input list='characterList' [(ngModel)]="selectedCharacter">
-	<button id='addCharacter' (click)='findCharacter()'>Add Character</button>
+	<button id='addCharacter' (click)='addCharacter()'>Add Character</button>
 
 	<br />
 	<br />
+
 	<div class='row'>
 	</div>
 
