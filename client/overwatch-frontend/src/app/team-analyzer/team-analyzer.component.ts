@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import * as $ from 'jquery';
+import Chart from 'chart.js';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
-import Chart from 'chart.js';
+import * as $ from 'jquery';
+
 
 
 
@@ -21,9 +22,7 @@ export class TeamAnalyzerComponent implements OnInit {
 	individualChart;
 
 
-	colors = [
-	"rgba(249,158,26, .5)", "rgba(33,143,254, .5)", "rgba(250,90,73, .5)", "rgba(102,174,52, .5", "rgba(167, 101, 185,.5)"
-	]
+	colors = ["rgba(249,158,26, .5)", "rgba(33,143,254, .5)", "rgba(250,90,73, .5)", "rgba(102,174,52, .5", "rgba(167, 101, 185,.5)"]
 
 	characters = [
 	{
@@ -40,20 +39,16 @@ export class TeamAnalyzerComponent implements OnInit {
 	},
 	{
 		name: 'Mercy'
-	}
-	];
+	}];
 
 	radarData = {
 	    labels: ['Damage', 'Disruption', 'Mobility', 'Protection', 'Healing', 'Sustain'],
-	    datasets: [
-
-	    ]
+	    datasets: []
 	};
 
 	radarDataAdditive = {
 		labels: ['Damage', 'Disruption', 'Mobility', 'Protection', 'Healing', 'Sustain'],
-		datasets: [
-		]
+		datasets: []
 	};
 
 	currentCharNames = []
@@ -66,6 +61,7 @@ export class TeamAnalyzerComponent implements OnInit {
   	this.renderIndividualRadarChart();
   }
 
+  	//This renders the radar chart that uses the radarDataAdditive set
 	renderTeamRadarChart(){
 		var teamRadarChart = $('#teamStats')[0].getContext('2d');
 
@@ -85,6 +81,7 @@ export class TeamAnalyzerComponent implements OnInit {
   	  })
 	}
 
+	//This renders the radar chart that uses the radarData set
 	renderIndividualRadarChart(){
 		var individualRadarChart = $('#individualStats')[0].getContext('2d');
 
@@ -104,21 +101,27 @@ export class TeamAnalyzerComponent implements OnInit {
   	  })
 	}
 	
+
 	addCharacter(){
+		//Counts the number of character divs on the page
 		var numChars = $('.charDiv').length
 
+		//If there are six character divs the error message changes and the function stops
 		if (numChars >= 6) {
 			this.errorMessage = "You can't have more than six characters on a team"
 		} else {
 		this.http.get('http://localhost:3000/characters/' + this.selectedCharacter).subscribe(response => {
 			var self = this
 			var processedResponse = response.json()
+
+			//Ends function if new character name is already in currentCharNames array
 			for (let name of this.currentCharNames) {
 				if (name === processedResponse.name) {
 					self.errorMessage = "This character is already on the team"
 					return "end search"
 				}
 			}
+
 			var newCharacterImage = processedResponse.image
 			var iterator = 0;
 
@@ -143,24 +146,25 @@ export class TeamAnalyzerComponent implements OnInit {
 
 			//This the array that contains the character objects. Each object has properties like 'label', 
 			//'color', and 'data'
-			var characters = this.radarDataAdditive.datasets;
+			var additiveCharData = this.radarDataAdditive.datasets;
 
 
 			this.createCharacterDiv()
 			if (numChars === 0) {
 				this.radarData.datasets.push(newCharacter)
-				this.radarDataAdditive.datasets.push(newCharacter)
+				additiveCharData.push(newCharacter)
 			} else {
 				//Adds a character to the individual dataset
 				this.radarData.datasets.push(newCharacter)
 
-				for (let data of newCharacter.data) {
-					if (characters.length === 0) {
-						data = data; 
+				//Takes the new dataset and adds it to the previous high dataset for additve stats
+				for (let stat of newCharacter.data) {
+					if (additiveCharData.length === 0) {
+						stat = stat; 
 					} else {
-					data = data + characters[characters.length - 1].data[iterator]
+					stat = stat + additiveCharData[additiveCharData.length - 1].data[iterator]
 				}
-					additiveCharacter.data.push(data)
+					additiveCharacter.data.push(stat)
 					iterator++;
 				}
 				iterator = 0;
@@ -173,7 +177,6 @@ export class TeamAnalyzerComponent implements OnInit {
 			this.individualChart.update();
 			this.selectedCharacter = "";
 			this.errorMessage = "";
-			console.log(this.currentCharNames)
 		})
 	}
 	}
