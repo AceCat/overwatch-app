@@ -17,6 +17,7 @@ export class TeamAnalyzerComponent implements OnInit {
 	selectedCharacter = "";
 
 	teamChart;
+	individualChart;
 
 
 	colors = [
@@ -55,10 +56,11 @@ export class TeamAnalyzerComponent implements OnInit {
   }
 
   ngOnInit() {
-  	this.renderRadarChart();
+  	this.renderTeamRadarChart();
+  	this.renderIndividualRadarChart();
   }
 
-	renderRadarChart(){
+	renderTeamRadarChart(){
 		var teamRadarChart = $('#teamStats')[0].getContext('2d');
 
 		this.teamChart = new Chart(teamRadarChart, {
@@ -77,7 +79,24 @@ export class TeamAnalyzerComponent implements OnInit {
   	  })
 	}
 
+	renderIndividualRadarChart(){
+		var individualRadarChart = $('#individualStats')[0].getContext('2d');
 
+		this.individualChart = new Chart(individualRadarChart, {
+		type: 'radar',
+		data: this.radarData,
+		options: {
+			scale: {
+				ticks: {
+					min: -5
+				}
+		},
+        	legend: {
+        		position: 'top',
+          } 
+		}
+  	  })
+	}
 	
 	addCharacter(){
 		this.http.get('http://localhost:3000/characters/' + this.selectedCharacter).subscribe(response => {
@@ -112,7 +131,6 @@ export class TeamAnalyzerComponent implements OnInit {
 				this.radarData.datasets.push(newCharacter)
 				this.radarDataAdditive.datasets.push(newCharacter)
 			} else {
-				console.log('firing')
 				this.radarData.datasets.push(newCharacter)
 				for (let data of newCharacter.data) {
 					data = data + this.radarDataAdditive.datasets[this.characterCounter-1].data[iterator]
@@ -126,10 +144,10 @@ export class TeamAnalyzerComponent implements OnInit {
 			this.setCharacterImage(newCharacterImage)
 			this.characterCounter++
 			this.teamChart.update();
+			this.individualChart.update();
 			this.selectedCharacter = "";
 		})
 	}
-
 
 	createCharacterDiv(){
 		var self = this;
@@ -171,6 +189,7 @@ export class TeamAnalyzerComponent implements OnInit {
 	}
 
 }
+
 	setCharacterImage(imageFile){
 		var portraitSpace = $('#characterImage' + this.characterCounter);
 		portraitSpace.attr('src', '../../assets/Overwatch_Images/' + imageFile)
