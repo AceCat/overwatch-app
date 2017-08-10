@@ -15,6 +15,7 @@ import Chart from 'chart.js';
 export class TeamAnalyzerComponent implements OnInit {
 	characterCounter = 0;
 	selectedCharacter = "";
+	teamChart;
 
 
 	colors = [
@@ -30,6 +31,9 @@ export class TeamAnalyzerComponent implements OnInit {
 	},
 	{
 		name: 'Sombra',
+	},
+	{
+		name: 'Reinhardt'
 	}
 	];
 
@@ -38,6 +42,12 @@ export class TeamAnalyzerComponent implements OnInit {
 	    datasets: [
 
 	    ]
+	};
+
+	radarDataAdditive = {
+		labels: ['Damage', 'Disruption', 'Mobility', 'Protection', 'Healing', 'Sustain'],
+		datasets: [
+		]
 	};
 
   constructor(private http: Http) { 
@@ -49,11 +59,9 @@ export class TeamAnalyzerComponent implements OnInit {
 
 	renderRadarChart(){
 		var teamRadarChart = $('#teamStats')[0].getContext('2d');
-		var newChart = new Chart(teamRadarChart, {
+		this.teamChart = new Chart(teamRadarChart, {
 		type: 'radar',
-		data: this.radarData,
-
-
+		data: this.radarDataAdditive,
 		options: {
 			scale: {
 				ticks: {
@@ -67,18 +75,14 @@ export class TeamAnalyzerComponent implements OnInit {
   	  })
 	}
 
-	removeRadarChart(){
-		$('#teamStats').empty();
-		console.log('radar chart removed')
-	}
-
-
 	
 	findCharacter(){
 		this.http.get('http://localhost:3000/characters/' + this.selectedCharacter).subscribe(response => {
+			var self = this
 			var processedResponse = response.json()
 			var newCharacterImage = processedResponse.image
 			console.log(processedResponse)
+			var iterator = 0;
 
 			function objectValuesToArray(obj) {
   				return Object.keys(obj).map(function (key) { return obj[key]; });
@@ -86,18 +90,45 @@ export class TeamAnalyzerComponent implements OnInit {
 
 			var newCharacterStats = objectValuesToArray(processedResponse.stats)
 
+			console.log(newCharacterStats)
+
+			var additiveCharacterStats = []
+
+
 			var newCharacter = {
 				label: processedResponse.name,
 				backgroundColor: this.colors[this.characterCounter],
 				data: newCharacterStats
 			}
 
-			this.characterCounter++
+			var additiveCharacter = {
+				label: processedResponse.name,
+				backgroundColor: this.colors[this.characterCounter],
+				data: []
+			}
+
+
 			this.createCharacterDiv()
-			this.radarData.datasets.push(newCharacter)
-			this.removeRadarChart();
-			this.renderRadarChart()
+			if (this.characterCounter === 0) {
+				this.radarData.datasets.push(newCharacter)
+				this.radarDataAdditive.datasets.push(newCharacter)
+			} else {
+				console.log('firing')
+				this.radarData.datasets.push(newCharacter)
+				for (let data of newCharacter.data) {
+					data = data + this.radarData.datasets[this.characterCounter-1].data[iterator]
+					console.log(data)
+					additiveCharacter.data.push(data)
+					iterator++;
+				}
+				console.log(this.radarData.datasets)
+				console.log(this.radarDataAdditive.datasets)
+				iterator = 0;
+				this.radarDataAdditive.datasets.push(additiveCharacter)
+		}
 			this.setCharacterImage(newCharacterImage)
+			this.characterCounter++
+			this.teamChart.update();
 			this.selectedCharacter = "";
 		})
 	}
@@ -110,9 +141,9 @@ export class TeamAnalyzerComponent implements OnInit {
 		var removeCharacterButton = $('#characterDiv' + this.characterCounter).append($('<button>Remove</button>'))
 		removeCharacterButton.on('click', function(){
 			this.remove()
-			self.radarData.datasets.splice(currentCount - 1, 1);
+			self.radarDataAdditive.datasets.splice(currentCount - 1, 1);
 			self.characterCounter--;
-			self.renderRadarChart();
+			self.teamChart.update();
 		})
 	}
 
