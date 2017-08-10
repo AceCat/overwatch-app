@@ -171,6 +171,7 @@ export class TeamAnalyzerComponent implements OnInit {
 				this.radarDataAdditive.datasets.push(additiveCharacter)
 		}
 			this.setCharacterImage(newCharacterImage)
+			this.setCharacterStats(newCharacter.data)
 			this.characterCounter++
 			this.currentCharNames.push(processedResponse.name);
 			this.teamChart.update();
@@ -185,10 +186,11 @@ export class TeamAnalyzerComponent implements OnInit {
 		var self = this;
 		var characterName = this.selectedCharacter;
 		var currentCount = this.characterCounter
-		console.log("character counter = " + currentCount)
-		var newCharacterDiv = $("<div class='col-md-4 charDiv' id=characterId" + this.characterCounter + "><div><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "></div></div>")
+		var newCharacterDiv = $("<div class='col-md-4 charDiv animated slideInRight' id=characterId" + this.characterCounter + "><div class='titleHolder'><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "><ul class='statsList' id=characterStats" + this.characterCounter + "><h3>Stats</h3></ul></div>")
 		$('.row').append(newCharacterDiv);
-		var removeCharacterButton = $('#characterId' + this.characterCounter).append($('<button>Remove</button>'))
+		var characterDiv = $('#characterId' + this.characterCounter)
+		characterDiv.append('<span id="removalId' + this.characterCounter + '"class="glyphicon glyphicon-remove"></span>')
+		var removeCharacterButton = $('#removalId' + this.characterCounter)
 		
 		function findCharacter(array, attr, value) {
     		for(var i = 0; i < array.length; i += 1) {
@@ -202,8 +204,9 @@ export class TeamAnalyzerComponent implements OnInit {
 		//This is the click listener that deletes the character div, removes their data from the radarData
 		//and updates the charts
 		removeCharacterButton.on('click', function(){
+			$(this).attr('class', 'slideOutLeft')
+			characterDiv.remove()
 			removeCharacterData()
-			this.remove()
 			self.teamChart.update();
 			self.individualChart.update();
 		})
@@ -231,6 +234,13 @@ export class TeamAnalyzerComponent implements OnInit {
 	setCharacterImage(imageFile){
 		var portraitSpace = $('#characterImage' + this.characterCounter);
 		portraitSpace.attr('src', '../../assets/Overwatch_Images/' + imageFile)
+	}
+
+	setCharacterStats(stats){
+		var newCharacter = $('#characterStats' + this.characterCounter);
+		for (var i = 0; i < stats.length; i++) {
+			newCharacter.append('<li>' + this.radarData.labels[i] + ": " + stats[i] + "</li>")
+		}	
 	}
 
 }
