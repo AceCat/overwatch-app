@@ -15,13 +15,14 @@ import Chart from 'chart.js';
 export class TeamAnalyzerComponent implements OnInit {
 	characterCounter = 0;
 	selectedCharacter = "";
+	errorMessage = "";
 
 	teamChart;
 	individualChart;
 
 
 	colors = [
-	"rgba(249,158,26, .5)", "rgba(33,143,254, .5)"
+	"rgba(249,158,26, .5)", "rgba(33,143,254, .5)", "rgba(250,90,73, .5)", "rgba(102,174,52, .5", "rgba(167, 101, 185,.5)"
 	]
 
 	characters = [
@@ -36,6 +37,9 @@ export class TeamAnalyzerComponent implements OnInit {
 	},
 	{
 		name: 'Reinhardt'
+	},
+	{
+		name: 'Mercy'
 	}
 	];
 
@@ -51,6 +55,8 @@ export class TeamAnalyzerComponent implements OnInit {
 		datasets: [
 		]
 	};
+
+	currentCharNames = []
 
   constructor(private http: Http) { 
   }
@@ -99,11 +105,21 @@ export class TeamAnalyzerComponent implements OnInit {
 	}
 	
 	addCharacter(){
+		var numChars = $('.charDiv').length
+
+		if (numChars >= 6) {
+			this.errorMessage = "You can't have more than six characters on a team"
+		} else {
 		this.http.get('http://localhost:3000/characters/' + this.selectedCharacter).subscribe(response => {
 			var self = this
 			var processedResponse = response.json()
+			for (let name of this.currentCharNames) {
+				if (name === processedResponse.name) {
+					self.errorMessage = "This character is already on the team"
+					return "end search"
+				}
+			}
 			var newCharacterImage = processedResponse.image
-			console.log(processedResponse)
 			var iterator = 0;
 
 			function objectValuesToArray(obj) {
@@ -115,26 +131,35 @@ export class TeamAnalyzerComponent implements OnInit {
 
 			var newCharacter = {
 				label: processedResponse.name,
-				backgroundColor: this.colors[this.characterCounter],
+				backgroundColor: this.colors[numChars],
 				data: newCharacterStats
 			}
 
 			var additiveCharacter = {
 				label: processedResponse.name,
-				backgroundColor: this.colors[this.characterCounter],
+				backgroundColor: this.colors[numChars],
 				data: []
 			}
 
+			//This the array that contains the character objects. Each object has properties like 'label', 
+			//'color', and 'data'
+			var characters = this.radarDataAdditive.datasets;
+
 
 			this.createCharacterDiv()
-			if (this.characterCounter === 0) {
+			if (numChars === 0) {
 				this.radarData.datasets.push(newCharacter)
 				this.radarDataAdditive.datasets.push(newCharacter)
 			} else {
+				//Adds a character to the individual dataset
 				this.radarData.datasets.push(newCharacter)
+
 				for (let data of newCharacter.data) {
-					data = data + this.radarDataAdditive.datasets[this.characterCounter-1].data[iterator]
-					console.log(data)
+					if (characters.length === 0) {
+						data = data; 
+					} else {
+					data = data + characters[characters.length - 1].data[iterator]
+				}
 					additiveCharacter.data.push(data)
 					iterator++;
 				}
@@ -143,10 +168,14 @@ export class TeamAnalyzerComponent implements OnInit {
 		}
 			this.setCharacterImage(newCharacterImage)
 			this.characterCounter++
+			this.currentCharNames.push(processedResponse.name);
 			this.teamChart.update();
 			this.individualChart.update();
 			this.selectedCharacter = "";
+			this.errorMessage = "";
+			console.log(this.currentCharNames)
 		})
+	}
 	}
 
 	createCharacterDiv(){
@@ -154,9 +183,9 @@ export class TeamAnalyzerComponent implements OnInit {
 		var characterName = this.selectedCharacter;
 		var currentCount = this.characterCounter
 		console.log("character counter = " + currentCount)
-		var newCharacterDiv = $("<div class='col-md-4' id=characterDiv" + this.characterCounter + "><div><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "></div></div>")
+		var newCharacterDiv = $("<div class='col-md-4 charDiv' id=characterId" + this.characterCounter + "><div><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "></div></div>")
 		$('.row').append(newCharacterDiv);
-		var removeCharacterButton = $('#characterDiv' + this.characterCounter).append($('<button>Remove</button>'))
+		var removeCharacterButton = $('#characterId' + this.characterCounter).append($('<button>Remove</button>'))
 		
 		function findCharacter(array, attr, value) {
     		for(var i = 0; i < array.length; i += 1) {
@@ -167,24 +196,28 @@ export class TeamAnalyzerComponent implements OnInit {
     			return -1;
 			}
 
+		//This is the click listener that deletes the character div, removes their data from the radarData
+		//and updates the charts
 		removeCharacterButton.on('click', function(){
 			removeCharacterData()
 			this.remove()
-			self.characterCounter--
 			self.teamChart.update();
 			self.individualChart.update();
 		})
 
+		//This finds the characters index by their name. It then removes that index from both arrays, but not
+		//before using the array at that index value within the individual array to subtract those values from
+		//all characters with a greater index value than the one being removed
 		function removeCharacterData(){
 			var indexToRemove = self.radarDataAdditive.datasets.findIndex(character => character.label === characterName)
-
-			var removedCharacter = self.radarDataAdditive.datasets[indexToRemove].data
+			var removedCharacter = self.radarData.datasets[indexToRemove].data
 			var valuesToSubtract = self.radarDataAdditive.datasets
-			for (var i = currentCount + 1; i < valuesToSubtract.length; i++){
+			for (var i = indexToRemove + 1; i < valuesToSubtract.length; i++){
 				valuesToSubtract[i].data.forEach(function(item, index, arr){
 					arr[index] = item - removedCharacter[index]
 			})
 		}
+			self.currentCharNames.splice(indexToRemove, 1);
 			self.radarDataAdditive.datasets.splice(indexToRemove, 1);
 			self.radarData.datasets.splice(indexToRemove, 1);
 
