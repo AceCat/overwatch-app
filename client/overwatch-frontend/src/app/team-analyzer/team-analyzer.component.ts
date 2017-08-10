@@ -93,10 +93,6 @@ export class TeamAnalyzerComponent implements OnInit {
 
 			var newCharacterStats = objectValuesToArray(processedResponse.stats)
 
-			console.log(newCharacterStats)
-
-			var additiveCharacterStats = []
-
 
 			var newCharacter = {
 				label: processedResponse.name,
@@ -119,13 +115,11 @@ export class TeamAnalyzerComponent implements OnInit {
 				console.log('firing')
 				this.radarData.datasets.push(newCharacter)
 				for (let data of newCharacter.data) {
-					data = data + this.radarData.datasets[this.characterCounter-1].data[iterator]
+					data = data + this.radarDataAdditive.datasets[this.characterCounter-1].data[iterator]
 					console.log(data)
 					additiveCharacter.data.push(data)
 					iterator++;
 				}
-				console.log(this.radarData.datasets)
-				console.log(this.radarDataAdditive.datasets)
 				iterator = 0;
 				this.radarDataAdditive.datasets.push(additiveCharacter)
 		}
@@ -139,47 +133,37 @@ export class TeamAnalyzerComponent implements OnInit {
 	createCharacterDiv(){
 		var self = this;
 		var currentCount = this.characterCounter
+		console.log("character counter = " + currentCount)
 		var newCharacterDiv = $("<div class='col-md-4' id=characterDiv" + this.characterCounter + "><div><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "></div></div>")
 		$('.row').append(newCharacterDiv);
 		var removeCharacterButton = $('#characterDiv' + this.characterCounter).append($('<button>Remove</button>'))
+		
 		removeCharacterButton.on('click', function(){
+			removeCharacterData()
 			this.remove()
-			self.radarDataAdditive.datasets.splice(currentCount - 1, 1);
-			self.characterCounter--;
+			self.radarDataAdditive.datasets.splice(currentCount, 1);
+			self.characterCounter = self.characterCounter - currentCount;
 			self.teamChart.update();
 		})
+
+		function removeCharacterData(){
+			var indexToRemove = currentCount;
+			console.log(indexToRemove)
+			console.log(self.radarDataAdditive.datasets)
+			var removedCharacter = self.radarDataAdditive.datasets[indexToRemove].data
+			var valuesToSubtract = self.radarDataAdditive.datasets
+			for (var i = currentCount + 1; i < valuesToSubtract.length; i++){
+				valuesToSubtract[i].data.forEach(function(item, index, arr){
+					arr[index] = item - removedCharacter[index]
+			})
+
+		}
 	}
 
+}
 	setCharacterImage(imageFile){
 		var portraitSpace = $('#characterImage' + this.characterCounter);
 		portraitSpace.attr('src', '../../assets/Overwatch_Images/' + imageFile)
 	}
-
-
-	// loadCharacter(){
-	// 	this.http.get()
-	// }
-
-
-
-		    //  {
-	        //     label: 'Team Totals',
-	        //     backgroundColor: "rgba(249,158,26, .5)",
-	        //     fillColor: '#f99e1a',
-	        //     colours: "[ [204, 0, 0], [230, 230, 0], [0, 153, 51] ]", 
-	        //     data: [35, 0, 15, 0, 10, 20]
-	        // },
-	        // {
-	        //     label: 'Soldier 76',
-	        //     backgroundColor: "rgba(249,158,26, .5)",
-	        //     fillColor: '#f99e1a',
-	        //     colours: "[ [204, 0, 0], [230, 230, 0], [0, 153, 51] ]", 
-	        //     data: [35, 0, 15, 0, 10, 20]
-	        // },
-	        // {
-	        //     label: 'Road Hog',
-	        //     fillColor: '#218ffe',
-	        //     data: [20, 10, 0, 0, 0, 40]
-	        // }
 
 }
