@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import Chart from 'chart.js';
+import { Http, Response } from '@angular/http';
+import { Router } from '@angular/router';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-characters',
@@ -7,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CharactersComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http: Http) { }
 
   ngOnInit() {
   }

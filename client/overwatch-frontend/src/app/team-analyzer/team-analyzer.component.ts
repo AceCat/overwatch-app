@@ -149,7 +149,7 @@ export class TeamAnalyzerComponent implements OnInit {
 			var additiveCharData = this.radarDataAdditive.datasets;
 
 
-			this.createCharacterDiv()
+			this.createCharacterDiv(this.colors[numChars])
 			if (numChars === 0) {
 				this.radarData.datasets.push(newCharacter)
 				additiveCharData.push(newCharacter)
@@ -182,15 +182,21 @@ export class TeamAnalyzerComponent implements OnInit {
 	}
 	}
 
-	createCharacterDiv(){
+	createCharacterDiv(divColor){
 		var self = this;
 		var characterName = this.selectedCharacter;
 		var currentCount = this.characterCounter
-		var newCharacterDiv = $("<div class='col-md-4 charDiv animated slideInRight' id=characterId" + this.characterCounter + "><div class='titleHolder'><h2>" + this.selectedCharacter + "</h2><img id=characterImage" + this.characterCounter + "><ul class='statsList' id=characterStats" + this.characterCounter + "><h3>Stats</h3></ul></div>")
+		var newCharacterDiv = $("<div class='col-md-4 charDiv animated slideInRight' id=characterId" + this.characterCounter + "><div class='titleHolder'><h2><a routerLink='/characters/" + this.selectedCharacter + "'>" + this.selectedCharacter + "</h2></a><img id=characterImage" + this.characterCounter + "><ul class='statsList' id=characterStats" + this.characterCounter + "><h3>Stats</h3></ul></div>")
 		$('.row').append(newCharacterDiv);
 		var characterDiv = $('#characterId' + this.characterCounter)
 		characterDiv.append('<span id="removalId' + this.characterCounter + '"class="glyphicon glyphicon-remove"></span>')
+		characterDiv.append('<a routerLink="/characters">Details</a>')
 		var removeCharacterButton = $('#removalId' + this.characterCounter)
+
+		//Trying to set background color equal to the value of the color key
+
+		// var boxColor = {'background-color': divColor}
+		// $('#characterId' + this.characterCounter).attr('ngstyle', boxColor);
 		
 		function findCharacter(array, attr, value) {
     		for(var i = 0; i < array.length; i += 1) {

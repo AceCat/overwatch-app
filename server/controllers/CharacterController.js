@@ -48,7 +48,9 @@ router.post('/', function (request, response) {
 		health: request.body.health,
 		stats: request.body.stats, 
 		description: request.body.description,
-		image: request.body.image
+		image: request.body.image,
+		quotes: request.body.quotes,
+		portrait: request.body.portrait
 	})
 	console.log(request)
 	character.save();
@@ -71,6 +73,8 @@ router.patch('/:id', function (request, response) {
 		character.image = request.body.image;
 		character.stats = request.body.stats;
 		character.description = request.body.description
+		character.quotes = request.body.quotes;
+		character.portrait = request.body.portrait;
 		character.save();
 		response.send(character)
 	})

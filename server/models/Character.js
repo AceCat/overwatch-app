@@ -14,6 +14,8 @@ var CharacterSchema = new mongoose.Schema({
     healing: Number
   },
   description: String,
+  quotes: Array,
+  portrait: String,
   Moves: [{type: mongoose.Schema.Types.ObjectId, ref: 'Moves'}]
 });
 
