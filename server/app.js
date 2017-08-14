@@ -4,7 +4,8 @@ var app = express();
 var cors = require('cors')
 var server = require('http').createServer(app);
 
-var CharacterController = require('./controllers/CharacterController')
+var AbilityController = require('./controllers/AbilityController');
+var CharacterController = require('./controllers/CharacterController');
 
 var port = server.listen(3000);
 
@@ -13,8 +14,8 @@ require ('./db/db.js');
 app.use(cors())
 
 
-
 app.use('/characters', CharacterController);
+app.use('/ability', AbilityController);
 
 
 

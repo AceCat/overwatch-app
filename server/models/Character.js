@@ -16,7 +16,7 @@ var CharacterSchema = new mongoose.Schema({
   description: String,
   quotes: Array,
   portrait: String,
-  Moves: [{type: mongoose.Schema.Types.ObjectId, ref: 'Moves'}]
+  abilities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Ability'}]
 });
 
 

@@ -1,3 +1,75 @@
-<p>
-  characters works!
-</p>
+<div class='container'>
+
+<div class='row'>
+		<div class='col-md-6'>
+			<h1>{{selectedCharacter.name}}</h1>
+			<h2 class='quote'>"{{generatedQuote}}"</h2>
+			<img class='characterPortrait' src='../../assets/Overwatch_Images/{{selectedCharacter.portrait}}'/>
+			<h2>Stats</h2>
+			<ul class='charStats'>
+				<li>Damage:{{selectedCharacter.stats.damage}}</li>
+				<li>Disruption:{{selectedCharacter.stats.disruption}}</li>
+				<li>Protection:{{selectedCharacter.stats.protection}}</li>
+				<li>Mobility:{{selectedCharacter.stats.mobility}}</li>
+				<li>Healing:{{selectedCharacter.stats.healing}}</li>
+				<li>Sustain:{{selectedCharacter.stats.sustain}}</li>
+			</ul>
+		</div>
+		<div class='col-md-6'>
+			<h2>{{selectedCharacter.role}}</h2>
+			<p>Description: {{selectedCharacter.description}}</p>
+			<h2>Stat Visualization</h2>
+			<div class='chartContainer'>
+				<canvas id="individualStats"></canvas>
+			</div>
+
+		</div>
+</div>
+
+	<div class='row'>
+	<div>
+		<input [(ngModel)]="newAbility.name" placeholder="Name"/>
+	    <input [(ngModel)]="newAbility.description" placeholder="Description"/>
+	    <input [(ngModel)]="newAbility.image" placeholder="Image Url"/>
+
+	    <input [(ngModel)]="newAbility.abilityStats.damage" placeholder="Damage"/>
+	    <input [(ngModel)]="newAbility.abilityStats.disruption" placeholder="Disruption"/>
+	    <input [(ngModel)]="newAbility.abilityStats.protection" placeholder="Protection"/>
+	    <input [(ngModel)]="newAbility.abilityStats.mobility" placeholder="Mobility"/>
+	    <input [(ngModel)]="newAbility.abilityStats.sustain" placeholder="Sustain"/>
+	    <input [(ngModel)]="newAbility.abilityStats.healing" placeholder="Healing"/>
+
+	    <button (click)="postAbility()">Submit</button>
+    </div>
+
+    <div class='row'>
+    	<table>
+    		<tr>
+    			<th>Image</th>
+    			<th>Name</th>
+    			<th>Description</th>
+    			<th>Damage</th>
+    			<th>Disruption</th>
+    			<th>Protection</th>
+    			<th>Mobility</th>
+    			<th>Sustain</th>
+    			<th>Healing</th>
+    		</tr>
+    		<tr *ngFor='let ability of selectedCharacter.abilities'>
+    			<td><img class='abilityImage' src='../../assets/Overwatch_Images/abilities/{{ability.image}}'/></td>
+    			<td>{{ability.name}}</td>
+    			<td>{{ability.description}}</td>
+    			<td>{{ability.abilityStats.damage}}</td>
+    			<td>{{ability.abilityStats.disruption}}</td>
+    			<td>{{ability.abilityStats.protection}}</td>
+    			<td>{{ability.abilityStats.mobility}}</td>
+    			<td>{{ability.abilityStats.sustain}}</td>
+    			<td>{{ability.abilityStats.healing}}</td>
+    		</tr>
+
+    	</table>
+    </div>
+
+	</div>
+
+</div>

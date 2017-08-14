@@ -8,6 +8,7 @@ import { AboutComponent } from './about/about.component';
 import { AppComponent } from './app.component';
 import { TeamAnalyzerComponent } from './team-analyzer/team-analyzer.component';
 import { CharactersComponent } from './characters/characters.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes: Routes = [
 	{
@@ -20,6 +21,10 @@ const routes: Routes = [
     },
     {
     	path: 'characters',
+    	component: CharactersComponent
+    },
+    {
+    	path: 'characters/:name',
     	component: CharactersComponent
     }
 ]
@@ -37,7 +42,7 @@ const routes: Routes = [
     FormsModule,
     HttpModule,
     RouterModule.forRoot(routes),
-
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -23,7 +23,7 @@ Character.find(function(error, characters) {
 
 router.get('/:name', function (request, response) {
 	var charName = request.params.name
-	Character.findOne({ name: charName}, function (err, character) {
+	Character.findOne({ name: charName}).populate('abilities').exec(function (err, character) {
 		response.send(character)
 	})
 })
@@ -75,6 +75,7 @@ router.patch('/:id', function (request, response) {
 		character.description = request.body.description
 		character.quotes = request.body.quotes;
 		character.portrait = request.body.portrait;
+		character.moves = request.body.moves;
 		character.save();
 		response.send(character)
 	})

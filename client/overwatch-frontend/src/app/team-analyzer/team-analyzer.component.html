@@ -31,10 +31,22 @@
 	<br />
 
 	<div class='row'>
+	<div [@addCharacter]='state' *ngFor='let character of radarData.datasets let i = index' [ngStyle]="{'background-color':'colors[i]'}" class='col-md-4 charDiv animated SlideInRight' ngDefaultControl>
+		<div class='titleHolder'>
+			<h2><a routerLink='/characters/{{character.label}}'>{{character.label}}</a></h2>
+			<img src={{character.image}}/>
+			<ul class='statsList'>
+			<h3>Stats</h3>
+				<li *ngFor='let stat of character.data let i = index'>{{radarData.labels[i]}}: {{stat}}</li>
+			</ul>
+		</div>
+		<span class="glyphicon glyphicon-remove" (click)='removeCharacterDiv(character)'></span>
 	</div>
 
 
 </div>
+
+
 
 
 
