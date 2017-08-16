@@ -42,9 +42,10 @@
 	    <button (click)="postAbility()">Submit</button>
     </div>
 
-    <div class='row'>
+    <div class='row noMargin'>
     <div [@abilityAnimation]='abilitiesLength'>
-    	<table>
+    	<table class='table'>
+    	<thead>
     		<tr>
     			<th>Image</th>
     			<th>Name</th>
@@ -56,6 +57,7 @@
     			<th>Sustain</th>
     			<th>Healing</th>
     		</tr>
+    	</thead>
     		<tr *ngFor='let ability of selectedCharacter.abilities'>
     			<td><img class='abilityImage' src='../../assets/Overwatch_Images/abilities/{{ability.image}}'/></td>
     			<td>{{ability.name}}</td>

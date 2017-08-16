@@ -6,7 +6,11 @@
   		<li><a data-toggle="tab" href="#individual">Individual Characters</a></li>
 	</ul>
 
-	<div class="tab-content">
+	<div class='row'>
+
+
+
+	<div class="tab-content col-md-7 col-md-push-5">
 	  <div id="totals" class="tab-pane fade in active">
 			<div class='chartContainer'>
 				<canvas id="teamStats"></canvas>
@@ -19,31 +23,35 @@
 		</div>
 	</div>
 
-
-
-	<h2 class='emphasizedHeader'>Add a character</h2>
-	<input class='characterInput' list='characterList' [(ngModel)]="selectedCharacter">
+	<div class='col-md-5 col-md-pull-7 leftSide'>
+		<h2 class='emphasizedHeader'>Add a character</h2>
+		<input class='characterInput' list='characterList' [(ngModel)]="selectedCharacter">
 		<datalist id='characterList'>
 		<option *ngFor='let character of characters' value={{character.name}} ngDefaultControl></option>
-	</datalist>
-	<button id='addCharacter' (click)='addCharacter()'>Add Character</button>
+		</datalist>
+		<button id='addCharacter' (click)='addCharacter()'>Add Character</button>
 	<p>{{errorMessage}}</p>
-
-	<br />
-	<br />
-
-	<div class='row charHolder'>
-	<div [@addCharacter]='state' *ngFor='let character of radarData.datasets let i = index' [ngStyle]="{'background-color':'colors[i]'}" class='col-md-4 col-sm-6 col-xs-6 col-centered charDiv animated SlideInRight' ngDefaultControl>
-		<div class='titleHolder'>
-			<h2><a routerLink='/characters/{{character.label}}'>{{character.label}}</a></h2>
-			<img src={{character.image}}/>
-			<ul class='statsList'>
-			<h3>Stats</h3>
-				<li *ngFor='let stat of character.data let i = index'>{{radarData.labels[i]}}: {{stat}}</li>
-			</ul>
+		<div [@addCharacter]='state' *ngFor='let character of radarData.datasets let i = index' [ngStyle]="{'background-color':'colors[i]'}" class='col-md-4 col-sm-6 col-xs-6 col-centered charDiv animated SlideInRight' ngDefaultControl>
+			<div class='titleHolder'>
+				<h2 class='charName'><a routerLink='/characters/{{character.label}}'>{{character.label}}</a></h2>
+				<img src={{character.image}}/>
+				<ul class='statsList'>
+				<h3>Stats</h3>
+					<li *ngFor='let stat of character.data let i = index'>{{radarData.labels[i]}}: {{stat}}</li>
+				</ul>
+			</div>
+			<span class="glyphicon glyphicon-remove" (click)='removeCharacterDiv(character)'></span>
 		</div>
-		<span class="glyphicon glyphicon-remove" (click)='removeCharacterDiv(character)'></span>
 	</div>
+
+
+
+
+
+	<br />
+	<br />
+
+
 
 
 </div>

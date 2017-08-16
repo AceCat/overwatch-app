@@ -93,6 +93,7 @@ export class TeamAnalyzerComponent implements OnInit {
   	//This renders the radar chart that uses the radarDataAdditive set
 	renderTeamRadarChart(){
 		var teamRadarChart = $('#teamStats')[0].getContext('2d');
+		var self = this;
 
 		this.teamChart = new Chart(teamRadarChart, {
 		type: 'radar',
@@ -100,12 +101,20 @@ export class TeamAnalyzerComponent implements OnInit {
 		options: {
 			scale: {
 				ticks: {
-					min: -5
+					min: -5,
+					max: this.characterCounter * 100
 				}
 		},
         	legend: {
         		position: 'top',
-          } 
+          },
+            tooltips: {
+      			callbacks: {
+        			label: function(tooltipItem, data) {
+        				return data.datasets[tooltipItem.datasetIndex].label + ': ' + self.radarData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+        			}
+      			}
+    		} 
 		}
   	  })
 	}
@@ -161,14 +170,16 @@ export class TeamAnalyzerComponent implements OnInit {
 
 			var newCharacter = {
 				label: processedResponse.name,
-				backgroundColor: this.colors[numChars],
+				borderColor: this.colors[numChars],
+				backgroundColor: 'rgba(0,0,0,0)',
 				image: '../../assets/Overwatch_Images/' + processedResponse.image,
 				data: newCharacterStats
 			}
 
 			var additiveCharacter = {
 				label: processedResponse.name,
-				backgroundColor: this.colors[numChars],
+				borderColor: this.colors[numChars],
+				backgroundColor: 'rgba(0,0,0,0)',
 				data: []
 			}
 
@@ -198,6 +209,10 @@ export class TeamAnalyzerComponent implements OnInit {
 				this.radarDataAdditive.datasets.push(additiveCharacter)
 		}
 			this.currentCharNames.push(processedResponse.name);
+			this.characterCounter++;
+			this.teamChart.options.scale.ticks.max = 150 + (this.characterCounter * 50);
+			console.log(this.teamChart.tooltip._data)
+			// this.teamChart.tooltip._data.datasets[numChars] = this.radarData.datasets[numChars];
 			this.teamChart.update();
 			this.individualChart.update();
 			this.selectedCharacter = "";
@@ -220,6 +235,8 @@ export class TeamAnalyzerComponent implements OnInit {
 		this.currentCharNames.splice(indexToRemove, 1);
 		this.radarDataAdditive.datasets.splice(indexToRemove, 1);
 		this.radarData.datasets.splice(indexToRemove, 1);
+		this.characterCounter--;
+		this.teamChart.options.scale.ticks.max = 100 + (this.characterCounter * 60);
 		this.teamChart.update();
 		this.individualChart.update();
 	}

@@ -1,7 +1,12 @@
+body {
+	overflow: hidden;
+}
+
 .chartContainer {
-	height: 60%;
-	width: 60%;
-	margin: auto;
+	width: 100%;
+	margin: 0 auto;
+	padding-bottom: 15px;
+	overflow: hidden;
 }
 
 .characterInput{
@@ -15,18 +20,12 @@
 }
 
 
-@media (max-width: 600px) {
-	.chartContainer{
-		width: 80%;
+
+@media (min-width: 700px ) {
+	.leftSide{
+		height: calc(100vh - 114px);
+		overflow: auto;
 	}
 }
-
-@media (max-width: 400px) {
-	.chartContainer{
-		width: 100%;
-	}
-
-}
-
 
 
