@@ -56,6 +56,18 @@ export class TeamAnalyzerComponent implements OnInit {
 	},
 	{
 		name: 'Mercy'
+	},
+	{
+		name: 'Genji'
+	},
+	{
+		name: 'Zenyatta'
+	},
+	{
+		name: 'McCree'
+	},
+	{
+		name: 'Pharah'
 	}];
 
 	radarData = {

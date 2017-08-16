@@ -20,18 +20,20 @@
 	</div>
 
 
-	<datalist id='characterList'>
+
+	<h2 class='emphasizedHeader'>Add a character</h2>
+	<input class='characterInput' list='characterList' [(ngModel)]="selectedCharacter">
+		<datalist id='characterList'>
 		<option *ngFor='let character of characters' value={{character.name}} ngDefaultControl></option>
 	</datalist>
-	<input list='characterList' [(ngModel)]="selectedCharacter">
 	<button id='addCharacter' (click)='addCharacter()'>Add Character</button>
 	<p>{{errorMessage}}</p>
 
 	<br />
 	<br />
 
-	<div class='row'>
-	<div [@addCharacter]='state' *ngFor='let character of radarData.datasets let i = index' [ngStyle]="{'background-color':'colors[i]'}" class='col-md-4 charDiv animated SlideInRight' ngDefaultControl>
+	<div class='row charHolder'>
+	<div [@addCharacter]='state' *ngFor='let character of radarData.datasets let i = index' [ngStyle]="{'background-color':'colors[i]'}" class='col-md-4 col-sm-6 col-xs-6 col-centered charDiv animated SlideInRight' ngDefaultControl>
 		<div class='titleHolder'>
 			<h2><a routerLink='/characters/{{character.label}}'>{{character.label}}</a></h2>
 			<img src={{character.image}}/>

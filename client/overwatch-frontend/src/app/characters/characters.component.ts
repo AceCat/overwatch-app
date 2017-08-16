@@ -5,6 +5,13 @@ import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 
+import {trigger,state,style,transition,animate,keyframes, animateChild} from '@angular/animations';
+import { stagger } from '@angular/animations';
+import { query } from '@angular/animations';
+
+
+
+
 class Character {
   id: String;
   name: String;
@@ -60,7 +67,48 @@ class Stats {
 @Component({
   selector: 'app-characters',
   templateUrl: './characters.component.html',
-  styleUrls: ['./characters.component.css']
+  styleUrls: ['./characters.component.css'],
+  animations: [    
+  	  trigger('abilityAnimation', [
+      transition('* => *', [
+
+        query(':enter', style({ opacity: 0 }), {optional: true}),
+
+        query(':enter', stagger('300ms', [
+          animate('.5s ease-in', keyframes([
+            style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+            style({opacity: .5, transform: 'translateY(-30%)',  offset: 0.3}),
+            style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+          ]))]), {optional: true})
+      ])
+    ])
+
+  ]
+
+//   [
+//   trigger('flyInOut', [
+  	
+//     state('in', style({transform: 'translateX(0)'})),
+//     transition('void => *', [
+//     query(':enter', [	
+//     stagger(500, [
+//       animate(2000, keyframes([
+//         style({opacity: 0, transform: 'translateX(-100%)', offset: 0}),
+//         style({opacity: 1, transform: 'translateX(15px)',  offset: 0.3}),
+//         style({opacity: 1, transform: 'translateX(0)',     offset: 1.0})
+//       ]))
+//       ])
+//     ]),
+//     transition('* => void', [
+//       animate(1000, keyframes([
+//         style({opacity: 1, transform: 'translateX(0)',     offset: 0}),
+//         style({opacity: 1, transform: 'translateX(-15px)', offset: 0.7}),
+//         style({opacity: 0, transform: 'translateX(100%)',  offset: 1.0})
+//       ]))
+//     ])
+//     ])
+//   ])
+// ]
 })
 export class CharactersComponent implements OnInit {
 
@@ -75,11 +123,17 @@ export class CharactersComponent implements OnInit {
   constructor(private route: ActivatedRoute, private http: Http, private router: Router) {
   	    let name = this.route.snapshot.params.name;
   	    this.fetchCharacter(name);
+  	    this.doNext()
+
    }
 
   characterName = ""
 
   generatedQuote = ""
+
+  next: number = 0;
+  staggeringAbilities: any[] = [];
+  abilitiesLength;
 
 
 
@@ -90,6 +144,13 @@ export class CharactersComponent implements OnInit {
 		datasets: []
 	};
 
+
+  doNext() {
+    if(this.next < this.abilitiesLength) {
+      this.staggeringAbilities.push(this.selectedCharacter.abilities[this.next++]);
+      console.log(this.staggeringAbilities)
+    }
+  }
 
 
   ngOnInit() {
@@ -134,9 +195,11 @@ export class CharactersComponent implements OnInit {
 
 		this.characterStats.datasets.push(characterObj)
 
-		console.log(this.selectedCharacter.abilities)
+		this.abilitiesLength = (this.selectedCharacter.abilities.length)
+		console.log(this.abilitiesLength)
 
 		this.renderIndividualRadarChart();
+
   	})
   }
 

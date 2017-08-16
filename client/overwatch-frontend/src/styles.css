@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family:"Koverwatch";
+    src: url("./assets/fonts/bignoodletoo.ttf");
+}
+
 .charDiv {
 	background-color: rgba(33,143,254,.75);
-	width: 30%;
+	width: 300px;
+	height: 200px;
 	color: white;
 	margin-right: 10px;
 	margin-bottom: 10px;
@@ -10,6 +16,18 @@
 	border-color: grey;
 	border-style: solid;
 	position: relative;
+}
+
+
+
+@media (max-width: 700px) {
+	.col-centered{
+		float: none;
+		margin: 0 auto;
+	}
+	.charDiv{
+		margin-bottom: 5px;
+	}
 }
 
 .statsList {
@@ -27,4 +45,8 @@
 }
 h3 {
 	display: inline;
+}
+
+.navbar-brand{
+	font-family: Koverwatch;
 }

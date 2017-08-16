@@ -1,9 +1,32 @@
 .chartContainer {
-	height: 600px;
-	width: 600px;
+	height: 60%;
+	width: 60%;
 	margin: auto;
 }
 
-.statsList {
-	list-style: none;
+.characterInput{
+	border-style: solid;
+	border-width: 2px;
+	border-color: orange;
 }
+
+.emphasizedHeader{
+	font-family: Koverwatch;
+}
+
+
+@media (max-width: 600px) {
+	.chartContainer{
+		width: 80%;
+	}
+}
+
+@media (max-width: 400px) {
+	.chartContainer{
+		width: 100%;
+	}
+
+}
+
+
+
