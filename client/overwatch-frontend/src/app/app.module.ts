@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { TeamAnalyzerComponent } from './team-analyzer/team-analyzer.component';
 import { CharactersComponent } from './characters/characters.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CharacterBrowserComponent } from './character-browser/character-browser.component';
 
 const routes: Routes = [
 	{
@@ -20,8 +21,8 @@ const routes: Routes = [
     	component: AboutComponent
     },
     {
-    	path: 'characters',
-    	component: CharactersComponent
+    	path: 'characters-browser',
+    	component: CharacterBrowserComponent
     },
     {
     	path: 'characters/:name',
@@ -35,7 +36,8 @@ const routes: Routes = [
     AppComponent,
     TeamAnalyzerComponent,
     AboutComponent,
-    CharactersComponent
+    CharactersComponent,
+    CharacterBrowserComponent
   ],
   imports: [
     BrowserModule,

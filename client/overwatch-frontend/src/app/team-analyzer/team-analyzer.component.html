@@ -27,10 +27,11 @@
 		<h2 class='emphasizedHeader'>Add a character</h2>
 		<input class='characterInput' list='characterList' [(ngModel)]="selectedCharacter">
 		<datalist id='characterList'>
-		<option *ngFor='let character of characters' value={{character.name}} ngDefaultControl></option>
+			<option *ngFor='let character of characterNames' value={{character.name}} ngDefaultControl></option>
 		</datalist>
-		<button id='addCharacter' (click)='addCharacter()'>Add Character</button>
+		<button class='btn-success' id='addCharacter' (click)='addCharacter()'>Add Character</button>
 	<p>{{errorMessage}}</p>
+
 		<div [@addCharacter]='state' *ngFor='let character of radarData.datasets let i = index' [ngStyle]="{'background-color':'colors[i]'}" class='col-md-4 col-sm-6 col-xs-6 col-centered charDiv animated SlideInRight' ngDefaultControl>
 			<div class='titleHolder'>
 				<h2 class='charName'><a routerLink='/characters/{{character.label}}'>{{character.label}}</a></h2>

@@ -1,33 +1,57 @@
 <div class='container'>
+	
+
 
 <div class='row'>
-		<div class='col-md-6'>
-			<h1>{{selectedCharacter.name}}</h1>
-			<h2 class='quote'>"{{generatedQuote}}"</h2>
-			<img class='characterPortrait' src='../../assets/Overwatch_Images/{{selectedCharacter.portrait}}'/>
-			<h2>Stats</h2>
-			<ul class='charStats'>
-				<li>Damage:{{selectedCharacter.stats.damage}}</li>
-				<li>Disruption:{{selectedCharacter.stats.disruption}}</li>
-				<li>Protection:{{selectedCharacter.stats.protection}}</li>
-				<li>Mobility:{{selectedCharacter.stats.mobility}}</li>
-				<li>Healing:{{selectedCharacter.stats.healing}}</li>
-				<li>Sustain:{{selectedCharacter.stats.sustain}}</li>
-			</ul>
-		</div>
-		<div class='col-md-6'>
-			<h2>{{selectedCharacter.role}}</h2>
-			<p>Description: {{selectedCharacter.description}}</p>
-			<h2>Stat Visualization</h2>
-			<div class='chartContainer'>
-				<canvas id="individualStats"></canvas>
+
+	<div class='col-md-4 leftSegment'>
+		<h1>{{selectedCharacter.name}}</h1>
+		<h2>Role: {{selectedCharacter.role}}</h2>
+		<h2 class='quote'>"{{generatedQuote}}"</h2>
+
+		<img class='characterPortrait' src='../../assets/Overwatch_Images/{{selectedCharacter.portrait}}'/>
+	</div>
+
+
+	<div class='col-md-8'>
+		<h2>Description</h2>
+		<p>{{selectedCharacter.description}}</p>
+
+		<div class='row'>
+			<div class='col-md-10 chartColumn'>
+				<h2>Stat Visualization</h2>
+				<div class='chartContainer'>
+					<canvas id="individualStats"></canvas>
+				</div>
 			</div>
 
+			<div class='col-md-1 statBox'>
+				<ul class='charStats'>
+					<h2>Stats</h2>
+					<li>Damage:{{selectedCharacter.stats.damage}}</li>
+					<li>Disruption:{{selectedCharacter.stats.disruption}}</li>
+					<li>Protection:{{selectedCharacter.stats.protection}}</li>
+					<li>Mobility:{{selectedCharacter.stats.mobility}}</li>
+					<li>Healing:{{selectedCharacter.stats.healing}}</li>
+					<li>Sustain:{{selectedCharacter.stats.sustain}}</li>
+				</ul>
+			</div>
+		</div>
+
+
+
+
+</div>
+
+	<div class='row'>
+		</div>
+
+		<div class='col-md-6'>
 		</div>
 </div>
 
 	<div class='row'>
-	<div>
+	<!-- <div>
 		<input [(ngModel)]="newAbility.name" placeholder="Name"/>
 	    <input [(ngModel)]="newAbility.description" placeholder="Description"/>
 	    <input [(ngModel)]="newAbility.image" placeholder="Image Url"/>
@@ -40,7 +64,9 @@
 	    <input [(ngModel)]="newAbility.abilityStats.healing" placeholder="Healing"/>
 
 	    <button (click)="postAbility()">Submit</button>
-    </div>
+    </div> -->
+    <br />
+    <br />
 
     <div class='row noMargin'>
     <div [@abilityAnimation]='abilitiesLength'>

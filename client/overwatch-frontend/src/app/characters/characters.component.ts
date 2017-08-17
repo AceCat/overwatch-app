@@ -121,15 +121,13 @@ export class CharactersComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private http: Http, private router: Router) {
-  	    let name = this.route.snapshot.params.name;
-  	    this.fetchCharacter(name);
-  	    this.doNext()
-
-   }
+  }
 
   characterName = ""
 
   generatedQuote = ""
+
+  lastParam = ""
 
   next: number = 0;
   staggeringAbilities: any[] = [];
@@ -154,6 +152,18 @@ export class CharactersComponent implements OnInit {
 
 
   ngOnInit() {
+  	this.route.params.subscribe(params => {
+  		console.log(params.name)
+  		if (params.name === this.lastParam) {
+  		} else {
+  			console.log('firing')
+  			this.characterStats = {
+				labels: ['Damage', 'Disruption', 'Mobility', 'Protection', 'Healing', 'Sustain'],
+				datasets: []
+			};
+  			this.fetchCharacter(params.name)
+  		}
+  	})
   }
 
   fetchCharacter(name){
@@ -198,6 +208,7 @@ export class CharactersComponent implements OnInit {
 		this.abilitiesLength = (this.selectedCharacter.abilities.length)
 		console.log(this.abilitiesLength)
 
+		this.lastParam = this.characterName;
 		this.renderIndividualRadarChart();
 
   	})

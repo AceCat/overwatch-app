@@ -1,0 +1,54 @@
+<!-- <div *ngFor='let character of characters class='col-md-4 col-sm-6 col-xs-6 col-centered charDiv' ngDefaultControl>
+			<div class='titleHolder'>
+				<h2 class='charName'><a routerLink='/characters/{{character.label}}'>{{character.label}}</a></h2>
+				<img src={{character.image}}/>
+				<ul class='statsList'>
+				<h3>Stats</h3>
+					<li *ngFor='let stat of character.data let i = index'>{{radarData.labels[i]}}: {{stat}}</li>
+				</ul>
+			</div>
+			<span class="glyphicon glyphicon-remove" (click)='removeCharacterDiv(character)'></span>
+</div> -->
+<div class='container'>
+
+	<div class='row classRow'>
+		<h1>Offense Heroes</h1>
+		<div *ngFor='let character of offenseCharacters' class='col-md-3 charBox'>
+			<div class='titleHolder'>
+				<h2><a routerLink='/characters/{{character.name}}'>{{character.name}}</a></h2>
+				<img src='../../assets/Overwatch_Images/{{character.image}}'/>
+			</div>
+		</div>
+	</div>
+
+	<div class='row classRow'>
+		<h1>Defense Heroes</h1>
+		<div *ngFor='let character of defenseCharacters' class='col-md-3 charBox'>
+			<div class='titleHolder'>
+				<h2><a routerLink='/characters/{{character.name}}'>{{character.name}}</a></h2>
+				<img src='../../assets/Overwatch_Images/{{character.image}}'/>
+			</div>
+		</div>
+	</div>
+
+	<div class='row classRow'>
+		<h1>Tank Heroes</h1>
+		<div *ngFor='let character of tankCharacters' class='col-md-3 charBox'>
+			<div class='titleHolder'>
+				<h2><a routerLink='/characters/{{character.name}}'>{{character.name}}</a></h2>
+				<img src='../../assets/Overwatch_Images/{{character.image}}'/>
+			</div>
+		</div>
+	</div>
+
+	<div class='row classRow'>
+		<h1>Support Heroes</h1>
+		<div *ngFor='let character of supportCharacters' class='col-md-3 charBox'>
+			<div class='titleHolder'>
+				<h2><a routerLink='/characters/{{character.name}}'>{{character.name}}</a></h2>
+				<img src='../../assets/Overwatch_Images/{{character.image}}'/>
+			</div>
+		</div>
+	</div>
+
+</div>

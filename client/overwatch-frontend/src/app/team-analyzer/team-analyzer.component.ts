@@ -40,35 +40,83 @@ export class TeamAnalyzerComponent implements OnInit {
 
 	colors = ["rgba(249,158,26, .5)", "rgba(33,143,254, .5)", "rgba(250,90,73, .5)", "rgba(102,174,52, .5", "rgba(167, 101, 185,.5)"]
 
-
-	characters = [
+	characterNames = [
 	{
-		name: 'Soldier 76',
+		name: 'Ana'
 	},
 	{
-		name: 'Reaper'
+		name: 'Bastion'
 	},
 	{
-		name: 'Sombra',
+		name: 'DVa'
 	},
 	{
-		name: 'Reinhardt'
-	},
-	{
-		name: 'Mercy'
+		name: 'Doomfist'
 	},
 	{
 		name: 'Genji'
 	},
 	{
-		name: 'Zenyatta'
+		name: 'Hanzo'
+	},
+	{
+		name: 'Junkrat'
+	},
+	{
+		name: 'Lucio'
 	},
 	{
 		name: 'McCree'
 	},
 	{
+		name: 'Mei'
+	},
+	{
+		name: 'Mercy'
+	},
+	{
+		name: 'Orisa'
+	},
+	{
 		name: 'Pharah'
+	},
+	{
+		name: 'Reaper'
+	},
+	{
+		name: 'Reinhardt'
+	},
+	{
+		name: 'Roadhog'
+	},
+	{
+		name: 'Soldier 76'
+	},
+	{
+		name: 'Sombra'
+	},
+	{
+		name: 'Symmetra'
+	},
+	{
+		name: 'Torbjorn'
+	},
+	{
+		name: 'Tracer'
+	},
+	{
+		name: 'Widowmaker'
+	},
+	{
+		name: 'Winston'
+	},
+	{
+		name: 'Zarya'
+	},
+	{
+		name: 'Zenyatta'
 	}];
+	
 
 	radarData = {
 	    labels: ['Damage', 'Disruption', 'Mobility', 'Protection', 'Healing', 'Sustain'],

@@ -9,6 +9,14 @@
 
 .charStats{
 	list-style: none;
+	width: 100px;
+	display: inline-block;
+	border-width: 3px;
+	border-radius: 5px;
+	padding-left: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+
 }
 
 .abilityImage{
@@ -19,6 +27,16 @@
 .noMargin {
 	margin-left: 0px;
 	margin-right: 0px;
+}
+
+.chartContainer{
+	width: 75%;
+	margin: 0 auto;
+}
+
+.statBox {
+	margin-left: -10%;
+	margin-top: 22%;
 }
 
 table {
@@ -52,13 +70,14 @@ th {
 }
 
 @media 
-only screen and (max-width: 760px),
+only screen and (max-width: 1000px),
 (min-device-width: 768px) and (max-device-width: 1024px)  {
 
 	/* Force table to not be like tables anymore */
 	table, thead, tbody, th, td, tr { 
 		display: block; 
 	}
+
 	
 	/* Hide table headers (but not display: none;, for accessibility) */
 	thead tr { 
@@ -74,15 +93,15 @@ only screen and (max-width: 760px),
 		border: none;
 		border-bottom: 1px solid #eee; 
 		position: relative;
-		padding-left: 50%; 
+		padding-left: 0%; 
 	}
 	
 	td:before { 
 		/* Now like a table header */
-		position: absolute;
+		position: relative;
 		/* Top/left values mimic padding */
-		left: 15px;
-		width: 30%; 
+		width: 20%;
+		font-weight: bold;
 		padding-right: 10px; 
 	}
 	
@@ -98,4 +117,18 @@ only screen and (max-width: 760px),
 	td:nth-of-type(7):before { content: "Mobility"; }
 	td:nth-of-type(8):before { content: "Sustain"; }
 	td:nth-of-type(9):before { content: "Healing"; }
+
+	.statBox {
+		margin-left: 0;
+		margin-top: 0;
+		margin: 0 auto;
+	}
+
+	.charStats{
+		background-color: white;
+		border-style: none;
+		color: black;
+	}
+
+
 }
