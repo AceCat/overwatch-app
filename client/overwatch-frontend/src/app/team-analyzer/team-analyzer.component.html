@@ -24,6 +24,12 @@
 	</div>
 
 	<div class='col-md-5 col-md-pull-7 leftSide'>
+
+		<h2 class='emphasizedHeader'>Recommended Characters</h2>
+		<div *ngFor='let recommendation of currentRecommendations'>
+			<h3 class='characterReco' (click)='addReccomendation(recommendation)'>{{recommendation}}</h3>
+		</div>
+
 		<h2 class='emphasizedHeader'>Add a character</h2>
 		<input class='characterInput' list='characterList' [(ngModel)]="selectedCharacter">
 		<datalist id='characterList'>

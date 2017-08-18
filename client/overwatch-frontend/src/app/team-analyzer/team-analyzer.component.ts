@@ -3,6 +3,8 @@ import Chart from 'chart.js';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
+import * as _ from "lodash";
+
 
 import {trigger,state,style,transition,animate,keyframes} from '@angular/animations';
 
@@ -35,7 +37,14 @@ export class TeamAnalyzerComponent implements OnInit {
 	teamChart;
 	individualChart;
 
-	state = 'inactive'
+	state = 'inactive';
+
+	allCharacters = [];
+	idealTeam = [320.13, 82.53, 299.05, 123.24, 107.99, 126.73]
+	currentTeamDiff = [320.13, 82.53, 299.05, 123.24, 107.99, 126.73]
+
+	currentRecommendations = [];
+
 
 
 	colors = ["rgba(249,158,26, .5)", "rgba(33,143,254, .5)", "rgba(250,90,73, .5)", "rgba(102,174,52, .5", "rgba(167, 101, 185,.5)"]
@@ -136,6 +145,7 @@ export class TeamAnalyzerComponent implements OnInit {
   ngOnInit() {
   	this.renderTeamRadarChart();
   	this.renderIndividualRadarChart();
+  	this.grabAllCharacters();
   }
 
   	//This renders the radar chart that uses the radarDataAdditive set
@@ -209,11 +219,7 @@ export class TeamAnalyzerComponent implements OnInit {
 			}
 			var iterator = 0;
 
-			function objectValuesToArray(obj) {
-  				return Object.keys(obj).map(function (key) { return obj[key]; });
-			}
-
-			var newCharacterStats = objectValuesToArray(processedResponse.stats)
+			var newCharacterStats = this.objectValuesToArrays(processedResponse.stats)
 
 
 			var newCharacter = {
@@ -259,12 +265,13 @@ export class TeamAnalyzerComponent implements OnInit {
 			this.currentCharNames.push(processedResponse.name);
 			this.characterCounter++;
 			this.teamChart.options.scale.ticks.max = 150 + (this.characterCounter * 50);
-			console.log(this.teamChart.tooltip._data)
 			// this.teamChart.tooltip._data.datasets[numChars] = this.radarData.datasets[numChars];
 			this.teamChart.update();
 			this.individualChart.update();
 			this.selectedCharacter = "";
 			this.errorMessage = "";
+			this.calculateTeamDifference();
+			this.calculateRecommendations();
 		})
 		}
 	}
@@ -292,6 +299,76 @@ export class TeamAnalyzerComponent implements OnInit {
 	slideIn(){
         this.state = (this.state === 'inactive' ? 'active' : 'inactive');
 	}
+
+	grabAllCharacters(){
+  		this.http.get('http://localhost:3000/characters').subscribe(response => {
+  		this.allCharacters = response.json();
+  		})
+  	}
+
+  	calculateRecommendations(){
+		var availableCharacters = this.allCharacters;
+
+		for (let name of this.currentCharNames){
+			availableCharacters = availableCharacters.filter(character => character.name !== name )
+		}
+
+		var diffArray = []
+
+  		for(var i = 0; i < availableCharacters.length; i++){
+
+  			var charDiffArray = []
+  			var charStats = this.objectValuesToArrays(availableCharacters[i].stats)
+
+
+  			for (var i2 = 0; i2 < charStats.length; i2++){
+  				var charDiff = this.currentTeamDiff[i2] - charStats[i2]
+  				if(charDiff < 0) {
+  					charDiff = charDiff * -.5
+  				}
+
+  				charDiffArray.push(charDiff)
+  			}
+
+  			var sum = charDiffArray.reduce((x, y) => x + y);
+
+  			diffArray.push({
+  				'name': availableCharacters[i].name,
+  				'index': [i][0],
+  				'statCont': sum
+  			})
+  		}
+
+  		var sortedDiffArray = diffArray.sort(function(a,b){
+  			return a.statCont - b.statCont;
+  		});
+
+  		this.currentRecommendations = [];
+
+  		for (var i = 3; i > 0; i--)
+  			this.currentRecommendations.push(sortedDiffArray[i].name)
+  		console.log(this.currentRecommendations)
+  	}
+
+  	calculateTeamDifference(){
+  		var calculatedDiff = []
+  		for(var i = 0; i < this.idealTeam.length; i++) {
+  			var newValue = this.idealTeam[i] - this.radarDataAdditive.datasets[this.radarDataAdditive.datasets.length-1].data[i]
+  			calculatedDiff.push(newValue)
+  		}
+  		this.currentTeamDiff = calculatedDiff;
+  		console.log(this.currentTeamDiff)
+  	}
+
+  	objectValuesToArrays(obj) {
+  		return Object.keys(obj).map(function (key) { return obj[key]; });
+  	}
+
+  	addReccomendation(character) {
+  		this.selectedCharacter = character;
+  		this.addCharacter();
+  	}
+
 
 
 }
